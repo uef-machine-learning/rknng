@@ -3,6 +3,13 @@ This module is a python wrapper for calling main function of knng.cpp
 We tried to abstract away the implementation of cpp code
 that is the reason why we directly call main function of the cpp program 
 instead of creating a new python main and call cpp APIs
+
+EXAMPLE
+to run this script, in your terminal:
+
+$ python3 NAME.py YOUR_EXECUTABLE CPP_ARG0 CPP_ARG1 ... CPP_ARGX
+
+$ python3 knng.py rknng data/birkbeckU.txt -o tmp/birkbeckU.knn --type txt -k 20
 """
 
 import sys
@@ -28,6 +35,7 @@ prepared_argv = _prepare_argv(sys.argv, currentDirectory)
 
 # create type for array of char => string
 LP_c_char = ctypes.POINTER(ctypes.c_char)
+
 # Create type for array of string
 LP_LP_c_char = ctypes.POINTER(LP_c_char)
 
