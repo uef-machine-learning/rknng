@@ -26,11 +26,18 @@ rknng = ctypes.CDLL('./rknng')
 currentDirectory = os.getcwd()
 prepared_argv = _prepare_argv(sys.argv, currentDirectory)
 
+# create type for array of char => string
 LP_c_char = ctypes.POINTER(ctypes.c_char)
+# Create type for array of string
 LP_LP_c_char = ctypes.POINTER(LP_c_char)
 
+rknng.main.argtypes = (ctypes.c_int, LP_LP_c_char) 
+
 argc = len(prepared_argv)
+
+# add +1 here for null terminator
 argv = (LP_c_char * (argc + 1))()
+
 for i, arg in enumerate(prepared_argv):
     enc_arg = arg.encode('utf-8')
     argv[i] = ctypes.create_string_buffer(enc_arg)
