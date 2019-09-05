@@ -28,6 +28,8 @@ DataSet *loadStringData(std::string infname) {
   DataSet *sd = (DataSet *)malloc(sizeof(DataSet));
   sd->strings = new vector<string>;
   sd->type = 2; // String data
+  sd->data = NULL;
+  
   int numLines = 0;
 
   while (std::getline(infile, line)) {
