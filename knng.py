@@ -16,6 +16,11 @@ import sys
 import numpy as np
 import os
 import ctypes
+import pandas as pd
+
+# CONSTANT
+LOG_ENABLE = True
+CPP_ENABLE = False
 
 def _prepare_argv(py_argv, cur_dir):
     # Remove python script path from argv
@@ -26,30 +31,38 @@ def _prepare_argv(py_argv, cur_dir):
     argv[0] = cur_dir + '/' + argv[0]
 
     return argv
+if CPP_ENABLE:
+    # load rknng executable
+    rknng = ctypes.CDLL('./rknng')
 
-# load rknng executable
-rknng = ctypes.CDLL('./rknng')
+    currentDirectory = os.getcwd()
+    prepared_argv = _prepare_argv(sys.argv, currentDirectory)
 
-currentDirectory = os.getcwd()
-prepared_argv = _prepare_argv(sys.argv, currentDirectory)
+    # create type for array of char => string
+    LP_c_char = ctypes.POINTER(ctypes.c_char)
 
-# create type for array of char => string
-LP_c_char = ctypes.POINTER(ctypes.c_char)
+    # Create type for array of string
+    LP_LP_c_char = ctypes.POINTER(LP_c_char)
 
-# Create type for array of string
-LP_LP_c_char = ctypes.POINTER(LP_c_char)
+    rknng.main.argtypes = (ctypes.c_int, LP_LP_c_char) 
 
-rknng.main.argtypes = (ctypes.c_int, LP_LP_c_char) 
+    argc = len(prepared_argv)
 
-argc = len(prepared_argv)
+    # add +1 here for null terminator
+    argv = (LP_c_char * (argc + 1))()
 
-# add +1 here for null terminator
-argv = (LP_c_char * (argc + 1))()
+    for i, arg in enumerate(prepared_argv):
+        enc_arg = arg.encode('utf-8')
+        argv[i] = ctypes.create_string_buffer(enc_arg)
 
-for i, arg in enumerate(prepared_argv):
-    enc_arg = arg.encode('utf-8')
-    argv[i] = ctypes.create_string_buffer(enc_arg)
+    # execution cpp module
+    rknng.main(argc, argv)
 
-# execution cpp module
-rknng.main(argc, argv)
-print('rknn done processing')
+    if LOG_ENABLE: print('------------ rknn done processing ------------')
+
+# After cpp finish its execution
+# Output will be wirtten to file which python can simply read
+knng_out = pd.read_csv('./tmp/bindata.knn', sep=" ", header=None, skiprows=1)
+if LOG_ENABLE:
+    print('------------ data from knng in cpp ------------ ')
+    print(knng_out)
