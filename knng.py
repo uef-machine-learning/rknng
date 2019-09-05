@@ -28,6 +28,14 @@ import pandas as pd
 LOG_ENABLE = True
 CPP_ENABLE = False
 
+def _show_return_information_log():
+    print('------------ data from knng.cpp ------------')
+    print(knng)
+    print('------------ neighbor graph ------------')
+    print(neighbor_graph)
+    print('------------ distance to neighbor graph ------------')
+    print(dist_to_neighbor_graph)
+
 def _prepare_argv(py_argv, cur_dir):
     # Remove python script path from argv
     # we don't need it for the cpp program
@@ -73,6 +81,7 @@ def _construct_knn_graph():
     
 # main
 knng = _construct_knn_graph()
-if LOG_ENABLE:
-        print('------------ data from knng in cpp ------------ ')
-        print(knng)
+neighbor_graph = np.array(knng)[:, 2:22]
+dist_to_neighbor_graph = np.array(knng)[:, 22:]
+
+if LOG_ENABLE: _show_return_information_log()
