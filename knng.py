@@ -50,4 +50,6 @@ for i, arg in enumerate(prepared_argv):
     enc_arg = arg.encode('utf-8')
     argv[i] = ctypes.create_string_buffer(enc_arg)
 
+# execution cpp module
 rknng.main(argc, argv)
+print('rknn done processing')
