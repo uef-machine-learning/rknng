@@ -4,7 +4,7 @@
 
 #include <climits>
 
-inline void nndes_join(DataSet* data, kNNGraph* kNN,int id_A, int i_knn, vector<vector<int>> &knn_list,
+inline void nndes_join(DataSet* data, kNNGraph* kNN,int id_A, int i_knn, vector<vector<int> > &knn_list,
         unsigned long long &update_count) {
     int id_last = INT_MAX;
     for(std::vector<int>::iterator it_B = knn_list[i_knn].begin(); it_B != knn_list[i_knn].end(); ++it_B) {
@@ -18,7 +18,7 @@ inline void nndes_join(DataSet* data, kNNGraph* kNN,int id_A, int i_knn, vector<
 }
 
 
-inline void nndes_join_old(DataSet* data, kNNGraph* kNN,int id_A, int i_knn, vector<vector<int>> &knn_list,
+inline void nndes_join_old(DataSet* data, kNNGraph* kNN,int id_A, int i_knn, vector<vector<int> > &knn_list,
         unsigned long long &update_count) {
     int id_last = INT_MAX;
     for(std::vector<int>::iterator it_B = knn_list[i_knn].begin(); it_B != knn_list[i_knn].end(); ++it_B) {
@@ -35,10 +35,10 @@ inline void nndes_join_old(DataSet* data, kNNGraph* kNN,int id_A, int i_knn, vec
 
 unsigned long long nndes_iterate_limited(DataSet* data, kNNGraph* kNN, int _k_limit) {
 
-    vector<vector<int>> new_knn(data->size);
-    vector<vector<int>> old_knn(data->size);
-    vector<vector<int>> reverse_new_knn(data->size);
-    vector<vector<int>> reverse_old_knn(data->size);
+    vector<vector<int> > new_knn(data->size);
+    vector<vector<int> > old_knn(data->size);
+    vector<vector<int> > reverse_new_knn(data->size);
+    vector<vector<int> > reverse_old_knn(data->size);
 
     int k_limit = kNN->k;
     if(_k_limit>0) { k_limit = _k_limit;}

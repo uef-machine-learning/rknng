@@ -1,3 +1,16 @@
+*
+!*.*
+!*/
+### Above combination will ignore all files without extension ###
+### since we do not need to include binary file to git ###
+
+.DS_Store
+### For mac users ###
+
+launch.json
+### For vscode users ###
+
 tmp
 *.out
 *.knn
+*.o
